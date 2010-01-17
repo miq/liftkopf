@@ -1,6 +1,7 @@
 package org.miq.model
 
 import net.liftweb._
+import net.liftweb.common.Full
 import mapper._
 import http._
 import SHtml._

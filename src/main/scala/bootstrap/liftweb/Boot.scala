@@ -9,6 +9,7 @@ import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConn
 import _root_.java.sql.{Connection, DriverManager}
 import _root_.org.miq.model._
 import _root_.javax.servlet.http.{HttpServletRequest}
+import net.liftweb.common._
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -39,18 +40,10 @@ class Boot {
     LiftRules.ajaxEnd =
             Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
 
-    LiftRules.early.append(makeUtf8)
+    LiftRules.early.append{ _.setCharacterEncoding("UTF-8") }
 
     S.addAround(DB.buildLoanWrapper)
   }
-
-  /**
-   * Force the request to be UTF-8
-   */
-  private def makeUtf8(req: HttpServletRequest) {
-    req.setCharacterEncoding("UTF-8")
-  }
-
 }
 
 /**

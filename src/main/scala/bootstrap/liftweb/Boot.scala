@@ -17,31 +17,24 @@ import net.liftweb.common._
  */
 class Boot {
   def boot {
-    if (!DB.jndiJdbcConnAvailable_?)
+    if (!DB.jndiJdbcConnAvailable_?) {
       DB.defineConnectionManager(DefaultConnectionIdentifier, DBVendor)
-
+    }
     // where to search snippet
     LiftRules.addToPackages("org.miq")
     Schemifier.schemify(true, Log.infoF _, User, ToDo)
-
     // Build SiteMap
     val entries = Menu(Loc("Home", List("index"), "Home")) :: Menu(Loc("Statistics", List("statistics"), "Statistics")) :: User.sitemap
     LiftRules.setSiteMap(SiteMap(entries: _*))
-
     /*
      * Show the spinny image when an Ajax call starts
      */
-    LiftRules.ajaxStart =
-            Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
-
+    LiftRules.ajaxStart = Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
     /*
      * Make the spinny image go away when it ends
      */
-    LiftRules.ajaxEnd =
-            Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
-
+    LiftRules.ajaxEnd = Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
     LiftRules.early.append{ _.setCharacterEncoding("UTF-8") }
-
     S.addAround(DB.buildLoanWrapper)
   }
 }
@@ -57,19 +50,13 @@ object DBVendor extends ConnectionManager {
   private def createOne: Box[Connection] = try {
     val driverName: String = Props.get("db.driver") openOr
             "org.apache.derby.jdbc.EmbeddedDriver"
-
     val dbUrl: String = Props.get("db.url") openOr
             "jdbc:derby:lift_example;create=true"
-
     Class.forName(driverName)
-
     val dm = (Props.get("db.user"), Props.get("db.password")) match {
-      case (Full(user), Full(pwd)) =>
-        DriverManager.getConnection(dbUrl, user, pwd)
-
+      case (Full(user), Full(pwd)) => DriverManager.getConnection(dbUrl, user, pwd)
       case _ => DriverManager.getConnection(dbUrl)
     }
-
     Full(dm)
   } catch {
     case e: Exception => e.printStackTrace; Empty

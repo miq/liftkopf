@@ -37,6 +37,11 @@ class Boot {
     LiftRules.early.append{ _.setCharacterEncoding("UTF-8") }
     S.addAround(DB.buildLoanWrapper)
   }
+  
+  ResponseInfo.docType = {
+        case _ if S.getDocType._1 => S.getDocType._2
+        case _ => Full(DocType.xhtmlStrict)
+      }
 }
 
 /**

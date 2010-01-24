@@ -1,7 +1,6 @@
 package bootstrap.liftweb
 
 import _root_.net.liftweb.util._
-import _root_.net.liftweb.http._
 import _root_.net.liftweb.sitemap._
 import _root_.net.liftweb.sitemap.Loc._
 import Helpers._
@@ -10,6 +9,7 @@ import _root_.java.sql.{Connection, DriverManager}
 import _root_.org.miq.model._
 import _root_.javax.servlet.http.{HttpServletRequest}
 import net.liftweb.common._
+import net.liftweb.http._
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -24,7 +24,7 @@ class Boot {
     LiftRules.addToPackages("org.miq")
     Schemifier.schemify(true, Log.infoF _, User, ToDo)
     // Build SiteMap
-    val entries = Menu(Loc("Home", List("index"), "Home")) :: Menu(Loc("Statistics", List("statistics"), "Statistics")) :: User.sitemap
+    val entries = Menu(Loc("Home", List("index"), S.?("Home"))) :: Menu(Loc("Statistics", List("statistics"), S.?("Statistics"))) :: User.sitemap
     LiftRules.setSiteMap(SiteMap(entries: _*))
     /*
      * Show the spinny image when an Ajax call starts
@@ -35,9 +35,10 @@ class Boot {
      */
     LiftRules.ajaxEnd = Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
     LiftRules.early.append{ _.setCharacterEncoding("UTF-8") }
+    LiftRules.resourceNames = "liftkopf" :: LiftRules.resourceNames
     S.addAround(DB.buildLoanWrapper)
   }
-  
+
   ResponseInfo.docType = {
         case _ if S.getDocType._1 => S.getDocType._2
         case _ => Full(DocType.xhtmlStrict)
@@ -98,5 +99,3 @@ object DBVendor extends ConnectionManager {
     notify
   }
 }
-
-

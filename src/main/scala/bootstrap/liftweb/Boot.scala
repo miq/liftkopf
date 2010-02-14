@@ -57,7 +57,7 @@ object DBVendor extends ConnectionManager {
     val driverName: String = Props.get("db.driver") openOr
             "org.apache.derby.jdbc.EmbeddedDriver"
     val dbUrl: String = Props.get("db.url") openOr
-            "jdbc:derby:lift_example;create=true"
+            "jdbc:derby:liftkopfdb;create=true"
     Class.forName(driverName)
     val dm = (Props.get("db.user"), Props.get("db.password")) match {
       case (Full(user), Full(pwd)) => DriverManager.getConnection(dbUrl, user, pwd)

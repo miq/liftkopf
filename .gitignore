@@ -1,2 +1,5 @@
 lift_example
 derby.log
+liftkopfdb/
+target/
+liftkopf.iws

@@ -1,7 +1,36 @@
 <!--suppress ALL -->
 <lift:surround with="default" at="content">
     <h3><lift:loc locid="statisticsHeading">Player Overview</lift:loc></h3>
-    Table
+    <table>
+        <thead>
+            <tr>
+                <th><lift:loc locid="playerName">Name</lift:loc></th>
+                <th><lift:loc locid="nickName">Nick Name</lift:loc></th>
+                <th><lift:loc locid="totalPoints">Total Points</lift:loc></th>
+                <th><lift:loc locid="totalGames">Total Games</lift:loc></th>
+                <th><lift:loc locid="totalWins">Total Wins</lift:loc></th>
+                <th><lift:loc locid="percentageWins">Win %</lift:loc></th>
+                <th><lift:loc locid="pointsPerGame">PPG</lift:loc></th>
+                <th><lift:loc locid="percentageRe">Re %</lift:loc></th>
+                <th><lift:loc locid="percentageAnnouncements">Announcement %</lift:loc></th>
+                <th><lift:loc locid="percentageAnnouncementsWon">Announcement Win %</lift:loc></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Dummy Name</td>
+                <td>Dummy Nick</td>
+                <td>500</td>
+                <td>250</td>
+                <td>124</td>
+                <td>49.657</td>
+                <td>0.500</td>
+                <td>51.431</td>
+                <td>23.485</td>
+                <td>83.112</td>
+            </tr>
+        </tbody>
+    </table>
     <h3><lift:loc locid="bidsHeading">Bids</lift:loc></h3>
     Table
 </lift:surround>

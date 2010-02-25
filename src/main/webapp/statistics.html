@@ -17,18 +17,20 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Dummy Name</td>
-                <td>Dummy Nick</td>
-                <td>500</td>
-                <td>250</td>
-                <td>124</td>
-                <td>49.657</td>
-                <td>0.500</td>
-                <td>51.431</td>
-                <td>23.485</td>
-                <td>83.112</td>
-            </tr>
+            <lift:player_overview_stats.list>
+                <tr>
+                    <td><player:name/></td>
+                    <td><player:nick/></td>
+                    <td><player:total_points/></td>
+                    <td><player:game_count/></td>
+                    <td><player:total_wins/></td>
+                    <td><player:win_percentage/></td>
+                    <td><player:points_per_game/></td>
+                    <td><player:re_percentage/></td>
+                    <td><player:announcement_percentage/></td>
+                    <td><player:announcement_win_percentage/></td>
+                </tr>
+            </lift:player_overview_stats.list>
         </tbody>
     </table>
     <h3><lift:loc locid="bidsHeading">Bids</lift:loc></h3>

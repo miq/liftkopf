@@ -3,24 +3,24 @@ package org.miq.snippet
 import scala.xml.NodeSeq
 import net.liftweb.util.Helpers._
 import org.miq.model.PlayerOverviewSummary
-import java.text.DecimalFormat
+import org.miq.liftkopf.Stats
 
 
 class PlayerOverviewStats {
   def list(html: NodeSeq) : NodeSeq = {
     getAllStats.flatMap(item =>
-            bind("player", html,
-              "name" -> item.name,
-              "nick" -> item.nick,
-              "total_points" -> item.totalPoints,
-              "game_count" -> item.gameCount,
-              "total_wins" -> item.totalWins,
-              "win_percentage" -> new DecimalFormat("0.000").format(item.winPercentage),
-              "points_per_game" -> new DecimalFormat("0.000").format(item.pointsPerGame),
-              "re_percentage" -> new DecimalFormat("0.000").format(item.rePercentage),
-              "announcement_percentage" -> new DecimalFormat("0.000").format(item.announcementPercentage),
-              "announcement_win_percentage" -> new DecimalFormat("0.000").format(item.announcementWinPercentage)
-            )
+      bind("player", html,
+        "name" -> item.name,
+        "nick" -> item.nick,
+        "total_points" -> item.totalPoints,
+        "game_count" -> item.gameCount,
+        "total_wins" -> item.totalWins,
+        "win_percentage" -> Stats.formatPercentage(item.winPercentage),
+        "points_per_game" -> Stats.formatPercentage(item.pointsPerGame),
+        "re_percentage" -> Stats.formatPercentage(item.rePercentage),
+        "announcement_percentage" -> Stats.formatPercentage(item.announcementPercentage),
+        "announcement_win_percentage" -> Stats.formatPercentage(item.announcementWinPercentage)
+      )
     )
   }
 

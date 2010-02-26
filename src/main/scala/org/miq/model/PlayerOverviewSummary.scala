@@ -1,5 +1,6 @@
 package org.miq.model
 
+import org.miq.liftkopf.Stats
 
 class PlayerOverviewSummary(
         val name: String,
@@ -11,13 +12,13 @@ class PlayerOverviewSummary(
         val announcementCount: Int,
         val announcementWins: Int) {
 
-  def winPercentage : Double = totalWins / gameCount.toDouble * 100
+  def winPercentage : Double = Stats.calculatePercentage(totalWins, gameCount)
 
   def pointsPerGame : Double = totalPoints / gameCount.toDouble
 
-  def rePercentage : Double = reCount / gameCount.toDouble * 100
+  def rePercentage : Double = Stats.calculatePercentage(reCount, gameCount)
 
-  def announcementPercentage : Double = announcementCount / gameCount.toDouble * 100
+  def announcementPercentage : Double = Stats.calculatePercentage(announcementCount, gameCount)
 
-  def announcementWinPercentage : Double = announcementWins / announcementCount.toDouble * 100
+  def announcementWinPercentage : Double = Stats.calculatePercentage(announcementWins, announcementCount)
 }

@@ -1,6 +1,8 @@
 package org.miq.model
 
 import org.miq.liftkopf.Stats
+import net.liftweb.http.js.JE._
+import net.liftweb.http.js.JsObj
 
 class PlayerOverviewSummary(
         val name: String,
@@ -21,4 +23,20 @@ class PlayerOverviewSummary(
   def announcementPercentage : Double = Stats.calculatePercentage(announcementCount, gameCount)
 
   def announcementWinPercentage : Double = Stats.calculatePercentage(announcementWins, announcementCount)
+
+  def asJson : JsObj = {
+    JsObj("name" -> name,
+      "nick" -> nick,
+      "totalpoints" -> totalPoints,
+      "gamecount" -> gameCount,
+      "totalwins" -> totalWins,
+      "recount" -> reCount,
+      "announcementcount" -> announcementCount,
+      "announcementwins" -> announcementWins,
+      "winPercentage" -> winPercentage,
+      "pointspergame" -> pointsPerGame,
+      "rePercentage" -> rePercentage,
+      "announcementpercentage" -> announcementPercentage,
+      "announcementwinpercentage" -> announcementWinPercentage)
+  }
 }

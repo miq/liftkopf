@@ -24,7 +24,7 @@ class PlayerOverviewStats {
     )
   }
 
-  private def getAllStats = {
+  def getAllStats : List[PlayerOverviewSummary] = {
     List(new PlayerOverviewSummary("John Doe", "johnny", 350, 1023, 560, 543, 273, 199),
       new PlayerOverviewSummary("Jane Doe", "jane", 100, 847, 450, 441, 199, 143),
       new PlayerOverviewSummary("Agent Smith", "elrond", -84, 666, 301, 311, 123, 57))

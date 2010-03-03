@@ -10,6 +10,7 @@ import _root_.org.miq.model._
 import _root_.javax.servlet.http.{HttpServletRequest}
 import net.liftweb.common._
 import net.liftweb.http._
+import org.miq.liftkopf.api.PlayerOverview
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -36,6 +37,8 @@ class Boot {
     LiftRules.ajaxEnd = Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
     LiftRules.early.append{ _.setCharacterEncoding("UTF-8") }
     LiftRules.resourceNames = "liftkopf" :: LiftRules.resourceNames
+    LiftRules.dispatch.prepend(PlayerOverview.dispatch)
+
     S.addAround(DB.buildLoanWrapper)
   }
 

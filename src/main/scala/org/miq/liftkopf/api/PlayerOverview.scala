@@ -17,6 +17,6 @@ object PlayerOverview {
   }
 
   def getAllPlayerOverviewStats() : LiftResponse = {
-    JsonResponse(JsArray(new PlayerOverviewStats().getAllStats.map(s => s.asJson) :_*))
+    JsonResponse(JsArray(new PlayerOverviewStats().getAllStats.map(s => s.asJson): _*))
   }
 }

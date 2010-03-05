@@ -9,14 +9,31 @@ import net.liftweb.common.Full
 object PlayerOverview {
 
   def dispatch: LiftRules.DispatchPF = {
-    case Req(List("api", "stats", "playeroverview", "list"), _, GetRequest) =>
-      () => Full(getAllPlayerOverviewStats)
+    case r@ Req(List("api", "stats", "playeroverview", "list"), _, GetRequest) =>
+      () => Full(getAllPlayerOverviewStats(r))
 //    case r @ Req(List("api", "expense", "", PutRequest) => () => addExpense(r)
     // Invalid API request - route to our error handler
 //    case Req(List("api", _), "", _) => failure _
   }
 
-  def getAllPlayerOverviewStats() : LiftResponse = {
+  def getAllPlayerOverviewStats(r: Req) : LiftResponse = {
+    r.headers.find(_._1 == "Accept") match {
+      case Some((k, "text/xml")) => getOverviewAsXml
+      case Some((k, "application/xml")) => getOverviewAsXml
+      case Some((k, "application/json")) => getOverviewAsJson
+      case None => getOverviewAsJson
+      case _ => new NotAcceptableResponse("No match for accept header")
+    }
+  }
+
+  private def getOverviewAsJson() : LiftResponse = {
     JsonResponse(JsArray(new PlayerOverviewStats().getAllStats.map(s => s.asJson): _*))
+  }
+
+  private def getOverviewAsXml() : XmlResponse = {
+    XmlResponse(
+      <statssummary>
+        {new PlayerOverviewStats().getAllStats.map(s => s.asXml)}
+      </statssummary>)
   }
 }

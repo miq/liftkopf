@@ -39,4 +39,22 @@ class PlayerOverviewSummary(
       "announcementpercentage" -> announcementPercentage,
       "announcementwinpercentage" -> announcementWinPercentage)
   }
+
+  def asXml = {
+    <summary>
+      <name>{name}</name>
+      <nick>{nick}</nick>
+      <totalpoints>{totalPoints}</totalpoints>
+      <gamecount>{gameCount}</gamecount>
+      <totalwins>{totalWins}</totalwins>
+      <recount>{reCount}</recount>
+      <announcementcount>{announcementCount}</announcementcount>
+      <announcementwins>{announcementWins}</announcementwins>
+      <winPercentage>{winPercentage}</winPercentage>
+      <pointspergame>{pointsPerGame}</pointspergame>
+      <rePercentage>{rePercentage}</rePercentage>
+      <announcementpercentage>{announcementPercentage}</announcementpercentage>
+      <announcementwinpercentage>{announcementWinPercentage}</announcementwinpercentage>
+    </summary>
+  }
 }

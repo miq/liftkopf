@@ -3,7 +3,6 @@ package org.miq.liftkopf.api
 import net.liftweb.http._
 import js.JE._
 
-import org.miq.snippet.PlayerOverviewStats
 import net.liftweb.common.Full
 import org.miq.model.PlayerOverviewSummary
 

@@ -1,2 +1,5 @@
 Liftkopf is an application to collect, store and statistically evaluate the score of Doppelkopf games played.
 It is destined to be the heir of webkopf, a similar application written some years ago in PHP.
+
+It will provide an advanced web interface and a RESTful web service API to handle all kinds of different client
+applications.

@@ -9,7 +9,7 @@ import org.miq.model.PlayerOverviewSummary
 object PlayerOverview {
 
   def dispatch: LiftRules.DispatchPF = {
-    case r@ Req(List("api", "stats", "playeroverview", "list"), _, GetRequest) =>
+    case r@ Req(List("api", "stats", "summary"), _, GetRequest) =>
       () => Full(getAllPlayerOverviewStats(r))
 //    case r @ Req(List("api", "expense", "", PutRequest) => () => addExpense(r)
     // Invalid API request - route to our error handler

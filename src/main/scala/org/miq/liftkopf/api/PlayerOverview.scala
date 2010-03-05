@@ -5,6 +5,7 @@ import js.JE._
 
 import org.miq.snippet.PlayerOverviewStats
 import net.liftweb.common.Full
+import org.miq.model.PlayerOverviewSummary
 
 object PlayerOverview {
 
@@ -27,13 +28,13 @@ object PlayerOverview {
   }
 
   private def getOverviewAsJson() : LiftResponse = {
-    JsonResponse(JsArray(new PlayerOverviewStats().getAllStats.map(s => s.asJson): _*))
+    JsonResponse(JsArray(PlayerOverviewSummary.findAll.map(s => s.asJson): _*))
   }
 
   private def getOverviewAsXml() : XmlResponse = {
     XmlResponse(
       <statssummary>
-        {new PlayerOverviewStats().getAllStats.map(s => s.asXml)}
+        {PlayerOverviewSummary.findAll.map(s => s.asXml)}
       </statssummary>)
   }
 }

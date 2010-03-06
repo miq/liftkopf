@@ -10,7 +10,7 @@ import _root_.org.miq.model._
 import _root_.javax.servlet.http.{HttpServletRequest}
 import net.liftweb.common._
 import net.liftweb.http._
-import org.miq.liftkopf.api.PlayerOverview
+import org.miq.liftkopf.api.{Sheet, PlayerOverview}
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -38,6 +38,7 @@ class Boot {
     LiftRules.early.append{ _.setCharacterEncoding("UTF-8") }
     LiftRules.resourceNames = "liftkopf" :: LiftRules.resourceNames
     LiftRules.dispatch.prepend(PlayerOverview.dispatch)
+    LiftRules.dispatch.prepend(Sheet.dispatch)
 
     S.addAround(DB.buildLoanWrapper)
   }

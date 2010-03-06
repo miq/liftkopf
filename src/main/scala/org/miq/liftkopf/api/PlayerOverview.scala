@@ -9,8 +9,7 @@ import org.miq.model.PlayerOverviewSummary
 object PlayerOverview extends AcceptedContentProvider {
 
   def dispatch: LiftRules.DispatchPF = {
-    case r@ Req(List("api", "stats", "summary"), _, GetRequest) =>
-      () => Full(getAllPlayerOverviewStats(r))
+    case r @ Req(List("api", "stats", "summary"), _, GetRequest) => () => Full(getAllPlayerOverviewStats(r))
 //    case r @ Req(List("api", "expense", "", PutRequest) => () => addExpense(r)
     // Invalid API request - route to our error handler
 //    case Req(List("api", _), "", _) => failure _

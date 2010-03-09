@@ -9,6 +9,7 @@ trait AcceptedContentProvider {
       case Some((k, "text/xml")) => xmlProvider()
       case Some((k, "application/xml")) => xmlProvider()
       case Some((k, "application/json")) => jsonProvider()
+      case Some((k, "*/*")) => jsonProvider()
       case None => jsonProvider()
       case _ => new NotAcceptableResponse("No match for accept header")
     }

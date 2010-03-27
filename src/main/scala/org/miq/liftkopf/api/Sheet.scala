@@ -26,8 +26,7 @@ object Sheet extends AcceptedContentProvider {
     // TODO: create the sheet as an open sheet on the server and return the location
     val newSheet = new Sheet(openSheets.size + 1)
     openSheets + newSheet
-    val bytes = "New open sheet created".getBytes("UTF-8")
-    new RestCreatedResponse(buildLocationUrl(r, newSheet.id), bytes)
+    RestCreatedResponse(buildLocationUrl(r, newSheet.id), "New open sheet created")
   }
 
   // TODO: extract into response type or another suitable place

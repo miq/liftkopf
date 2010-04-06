@@ -5,8 +5,10 @@ import net.liftweb.http
 import collection.mutable.ListBuffer
 import http._
 import org.miq.liftkopf.RestCreatedResponse
+import org.miq.liftkopf.RichRequest._
 
-class Sheet(val id: Int) {
+class Sheet(val id: Int, val playerIds: List[Int]) {
+  private val games : ListBuffer[Game] = new ListBuffer[Game]
 
 }
 
@@ -23,8 +25,15 @@ object Sheet extends AcceptedContentProvider {
   }
 
   def createNewSheet(r: Req) : LiftResponse = {
-    // TODO: create the sheet as an open sheet on the server and return the location
-    val newSheet = new Sheet(openSheets.size + 1)
+     // TODO: create the sheet as an open sheet on the server and return the location
+    println("Location: " + r.location)
+    //    val userIds  = List[String]()
+    val userIds  = r.getParameters("playerId")
+    println(userIds)
+    if (userIds.size < 4) {
+      return ResponseWithReason(BadResponse(), "Not enough user ids given: " + userIds.size)
+    }
+    val newSheet = new Sheet(openSheets.size + 1, Nil)
     openSheets + newSheet
     RestCreatedResponse(buildLocationUrl(r, newSheet.id), "New open sheet created")
   }
@@ -34,3 +43,4 @@ object Sheet extends AcceptedContentProvider {
     "http://" + r.request.serverName + ":" + r.request.serverPort + "/" + baseUrl.mkString("/") + "/" + sheetId
   }
 }
+

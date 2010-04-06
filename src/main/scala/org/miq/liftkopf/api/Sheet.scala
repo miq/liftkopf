@@ -27,13 +27,11 @@ object Sheet extends AcceptedContentProvider {
   def createNewSheet(r: Req) : LiftResponse = {
      // TODO: create the sheet as an open sheet on the server and return the location
     println("Location: " + r.location)
-    //    val userIds  = List[String]()
-    val userIds  = r.getParameters("playerId")
-    println(userIds)
-    if (userIds.size < 4) {
-      return ResponseWithReason(BadResponse(), "Not enough user ids given: " + userIds.size)
+    val playerIds  = r.getParameters("playerId")
+    if (playerIds.size < 4) {
+      return ResponseWithReason(BadResponse(), "Not enough user ids given: " + playerIds.size)
     }
-    val newSheet = new Sheet(openSheets.size + 1, Nil)
+    val newSheet = new Sheet(openSheets.size + 1, playerIds.map(_.toInt))
     openSheets + newSheet
     RestCreatedResponse(buildLocationUrl(r, newSheet.id), "New open sheet created")
   }

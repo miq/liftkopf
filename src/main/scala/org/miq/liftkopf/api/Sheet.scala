@@ -20,6 +20,7 @@ object Sheet extends AcceptedContentProvider {
 
   def dispatch: LiftRules.DispatchPF = {
     case r @ Req(`baseUrl`, _, PostRequest) => () => Full(createNewSheet(r))
+    case r @ Req("api" :: "sheet" :: sheetId :: "game" :: Nil, _, PostRequest) => () => Full(addGameToSheet(sheetId, r))
     // Invalid API request - route to our error handler
     case Req(`baseUrl`, "", _) => () => Full(new MethodNotAllowedResponse)
   }
@@ -34,6 +35,11 @@ object Sheet extends AcceptedContentProvider {
     val newSheet = new Sheet(openSheets.size + 1, playerIds.map(_.toInt))
     openSheets + newSheet
     RestCreatedResponse(buildLocationUrl(r, newSheet.id), "New open sheet created")
+  }
+
+  def addGameToSheet(sheetId: String, r: Req) : LiftResponse = {
+    println("adding game to sheet" + sheetId)
+    new OkResponse()
   }
 
   // TODO: extract into response type or another suitable place

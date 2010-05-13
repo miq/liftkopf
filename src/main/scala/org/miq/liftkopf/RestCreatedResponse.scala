@@ -2,7 +2,7 @@ package org.miq.liftkopf
 
 import net.liftweb.http._
 
-class RestCreatedResponse(locationHeader: String, data: Array[Byte]) extends LiftResponse with HeaderStuff {
+class RestCreatedResponse(locationHeader: String, data: Array[Byte]) extends LiftResponse with HeaderDefaults {
   override val toResponse: BasicResponse = new InMemoryResponse(
     data,
     ("Content-Length", data.length.toString)

@@ -37,7 +37,7 @@ class Boot {
     LiftRules.ajaxEnd = Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
     LiftRules.early.append{ _.setCharacterEncoding("UTF-8") }
     LiftRules.resourceNames = "liftkopf" :: LiftRules.resourceNames
-    LiftRules.dispatch.prepend(PlayerOverview.dispatch)
+    LiftRules.dispatch.append(PlayerOverview)
     LiftRules.dispatch.prepend(Sheet.dispatch)
 
     S.addAround(DB.buildLoanWrapper)

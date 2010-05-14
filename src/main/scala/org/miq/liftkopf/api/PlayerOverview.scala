@@ -5,18 +5,13 @@ import js.JE._
 
 import net.liftweb.common.Full
 import org.miq.model.PlayerOverviewSummary
+import rest.RestHelper
 
-object PlayerOverview extends AcceptedContentProvider {
+object PlayerOverview extends RestHelper {
 
-  def dispatch: LiftRules.DispatchPF = {
-    case r @ Req(List("api", "stats", "summary"), _, GetRequest) => () => Full(getAllPlayerOverviewStats(r))
-//    case r @ Req(List("api", "expense", "", PutRequest) => () => addExpense(r)
-    // Invalid API request - route to our error handler
-//    case Req(List("api", _), "", _) => failure _
-  }
-
-  def getAllPlayerOverviewStats(r: Req) : LiftResponse = {
-    getResponse(r, getOverviewAsJson, getOverviewAsXml)
+  serve {
+    case XmlGet("api" :: "stats" :: "summary" :: _, _) => Full(getOverviewAsXml)
+    case JsonGet("api" :: "stats" :: "summary" :: _, _) => Full(getOverviewAsJson)
   }
 
   private def getOverviewAsJson() : LiftResponse = {

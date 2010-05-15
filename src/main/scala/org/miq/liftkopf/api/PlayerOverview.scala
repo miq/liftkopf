@@ -5,9 +5,10 @@ import js.JE._
 
 import net.liftweb.common.Full
 import org.miq.model.PlayerOverviewSummary
-import rest.RestHelper
+import org.miq.liftkopf.LiftkopfRest
 
-object PlayerOverview extends RestHelper {
+// TODO: change to serveJx pattern with Convertable
+object PlayerOverview extends LiftkopfRest {
 
   serve {
     case XmlGet("api" :: "stats" :: "summary" :: _, _) => Full(getOverviewAsXml)

@@ -38,7 +38,7 @@ class Boot {
     LiftRules.early.append{ _.setCharacterEncoding("UTF-8") }
     LiftRules.resourceNames = "liftkopf" :: LiftRules.resourceNames
     LiftRules.dispatch.append(PlayerOverview)
-    LiftRules.dispatch.prepend(Sheet.dispatch)
+    LiftRules.dispatch.prepend(Sheet)
 
     S.addAround(DB.buildLoanWrapper)
   }

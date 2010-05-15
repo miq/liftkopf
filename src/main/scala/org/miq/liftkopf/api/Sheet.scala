@@ -1,11 +1,11 @@
 package org.miq.liftkopf.api
 
-import net.liftweb.common.{Full}
 import net.liftweb.http
 import collection.mutable.ListBuffer
 import http._
-import org.miq.liftkopf.RestCreatedResponse
-import org.miq.liftkopf.RichRequest._
+import net.liftweb.json.JsonAST.JValue
+import net.liftweb.common.Full
+import org.miq.liftkopf.{LiftkopfRest, RestCreatedResponse}
 
 class Sheet(val id: Int, val playerIds: List[Int]) {
   private val games : ListBuffer[Game] = new ListBuffer[Game]
@@ -13,22 +13,23 @@ class Sheet(val id: Int, val playerIds: List[Int]) {
 }
 
 
-object Sheet extends AcceptedContentProvider {
+object Sheet extends LiftkopfRest {
 
   private val baseUrl = List("api", "sheet")
   private val openSheets : ListBuffer[Sheet] = new ListBuffer[Sheet]
 
-  def dispatch: LiftRules.DispatchPF = {
-    case r @ Req(`baseUrl`, _, PostRequest) => () => Full(createNewSheet(r))
-    case r @ Req("api" :: "sheet" :: sheetId :: "game" :: Nil, _, PostRequest) => () => Full(addGameToSheet(sheetId, r))
-    // Invalid API request - route to our error handler
-    case Req(`baseUrl`, "", _) => () => Full(new MethodNotAllowedResponse)
+  serve {
+    case JsonPost(`baseUrl`, json) => () => Full(createNewSheet(json._1, json._2))
+    // TODO: implement XML interface sometime later
+//    case r @ XmlPost(`baseUrl`, xml) => () => Full(createNewSheet(r))
   }
 
-  def createNewSheet(r: Req) : LiftResponse = {
+  def createNewSheet(json: JValue, r: Req) : LiftResponse = {
      // TODO: create the sheet as an open sheet on the server and return the location
-    println("Location: " + r.location)
-    val playerIds  = r.getParameters("playerId")
+    println("json:" + json)
+    val newSheetRequest  = json.extract[NewSheet]
+    val playerIds = newSheetRequest.playerIds
+    println("playerIds:" + playerIds)
     if (playerIds.size < 4) {
       return ResponseWithReason(BadResponse(), "Not enough user ids given: " + playerIds.size)
     }
@@ -47,4 +48,6 @@ object Sheet extends AcceptedContentProvider {
     "http://" + r.request.serverName + ":" + r.request.serverPort + "/" + baseUrl.mkString("/") + "/" + sheetId
   }
 }
+
+case class NewSheet(playerIds: List[Int])
 

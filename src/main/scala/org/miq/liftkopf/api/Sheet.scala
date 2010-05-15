@@ -15,7 +15,7 @@ class Sheet(val id: Int, val playerIds: List[Int]) {
 
 object Sheet extends LiftkopfRest {
 
-  private val baseUrl = List("api", "sheet")
+  protected val baseUrl = List("api", "sheet")
   private val openSheets : ListBuffer[Sheet] = new ListBuffer[Sheet]
 
   serve {
@@ -41,11 +41,6 @@ object Sheet extends LiftkopfRest {
   def addGameToSheet(sheetId: String, r: Req) : LiftResponse = {
     println("adding game to sheet" + sheetId)
     new OkResponse()
-  }
-
-  // TODO: extract into response type or another suitable place
-  private def buildLocationUrl(r: Req, sheetId: Int) : String = {
-    "http://" + r.request.serverName + ":" + r.request.serverPort + "/" + baseUrl.mkString("/") + "/" + sheetId
   }
 }
 

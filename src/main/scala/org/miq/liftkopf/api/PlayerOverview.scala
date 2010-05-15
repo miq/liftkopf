@@ -10,9 +10,11 @@ import org.miq.liftkopf.LiftkopfRest
 // TODO: change to serveJx pattern with Convertable
 object PlayerOverview extends LiftkopfRest {
 
+  protected val baseUrl = List("api", "stats", "summary")
+
   serve {
-    case XmlGet("api" :: "stats" :: "summary" :: _, _) => Full(getOverviewAsXml)
-    case JsonGet("api" :: "stats" :: "summary" :: _, _) => Full(getOverviewAsJson)
+    case XmlGet(`baseUrl`, _) => Full(getOverviewAsXml)
+    case JsonGet(`baseUrl`, _) => Full(getOverviewAsJson)
   }
 
   private def getOverviewAsJson() : LiftResponse = {

@@ -6,9 +6,13 @@ import http._
 import net.liftweb.json.JsonAST.JValue
 import net.liftweb.common.Full
 import org.miq.liftkopf.{LiftkopfRest, RestCreatedResponse}
+import net.liftweb.json.JsonAST
+import net.liftweb.json.JsonDSL._
 
-class Sheet(val id: Int, val playerIds: List[Int]) {
+class Sheet(val id: Int, val location: String, val group: String, val playerIds: List[Int]) {
   private val games : ListBuffer[Game] = new ListBuffer[Game]
+
+  def getStanding() : Standing = new Standing(playerIds.map(_ => 0))
 
 }
 
@@ -29,13 +33,13 @@ object Sheet extends LiftkopfRest {
     println("json:" + json)
     val newSheetRequest  = json.extract[NewSheet]
     val playerIds = newSheetRequest.playerIds
-    println("playerIds:" + playerIds)
     if (playerIds.size < 4) {
       return ResponseWithReason(BadResponse(), "Not enough user ids given: " + playerIds.size)
     }
-    val newSheet = new Sheet(openSheets.size + 1, playerIds.map(_.toInt))
+    val newSheet = new Sheet(openSheets.size + 1, newSheetRequest.location, newSheetRequest.group, playerIds.map(_.toInt))
     openSheets + newSheet
-    RestCreatedResponse(buildLocationUrl(r, newSheet.id), "New open sheet created")
+    val jsonResponse = ("standing" -> newSheet.getStanding.scores)
+    RestCreatedResponse(buildLocationUrl(r, newSheet.id), "application/json", compact(JsonAST.render(jsonResponse)))
   }
 
   def addGameToSheet(sheetId: String, r: Req) : LiftResponse = {
@@ -44,5 +48,7 @@ object Sheet extends LiftkopfRest {
   }
 }
 
-case class NewSheet(playerIds: List[Int])
+case class NewSheet(group: String, location: String, playerIds: List[Int])
+
+case class Standing(scores: List[Int])
 

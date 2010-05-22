@@ -1,8 +1,7 @@
 package org.miq.liftkopf.api
 
-import net.liftweb.http
+import net.liftweb.http._
 import collection.mutable.ListBuffer
-import http._
 import net.liftweb.json.JsonAST.JValue
 import net.liftweb.common.Full
 import org.miq.liftkopf.{LiftkopfRest, RestCreatedResponse}
@@ -10,7 +9,19 @@ import net.liftweb.json.JsonAST
 import net.liftweb.json.JsonDSL._
 
 class Sheet(val id: Int, val location: String, val group: String, val playerIds: List[Int]) {
-  private val games : ListBuffer[Game] = new ListBuffer[Game]
+  private val deals : ListBuffer[Deal] = new ListBuffer[Deal]
+
+  def addDeal(newDeal: Deal) : Standing = {
+    deals + newDeal
+    calculateCurrentStanding(newDeal)
+  }
+
+  def calculateCurrentStanding(newDeal: Deal) : Standing = {
+    println("score: " + newDeal.score)
+    println("actions count: " + newDeal.actions.size)
+    // TODO calculate the new standings
+    getStanding()
+  }
 
   def getStanding() : Standing = new Standing(playerIds.map(_ => 0))
 
@@ -24,12 +35,12 @@ object Sheet extends LiftkopfRest {
 
   serve {
     case JsonPost(`baseUrl`, json) => () => Full(createNewSheet(json._1, json._2))
+    case JsonPost("api" :: "sheet" :: id :: "deal" :: _, json) => Full(addDealTo(id.toInt, json._1, json._2))
     // TODO: implement XML interface sometime later
 //    case r @ XmlPost(`baseUrl`, xml) => () => Full(createNewSheet(r))
   }
 
-  def createNewSheet(json: JValue, r: Req) : LiftResponse = {
-     // TODO: create the sheet as an open sheet on the server and return the location
+  private def createNewSheet(json: JValue, r: Req) : LiftResponse = {
     println("json:" + json)
     val newSheetRequest  = json.extract[NewSheet]
     val playerIds = newSheetRequest.playerIds
@@ -42,13 +53,29 @@ object Sheet extends LiftkopfRest {
     RestCreatedResponse(buildLocationUrl(r, newSheet.id), "application/json", compact(JsonAST.render(jsonResponse)))
   }
 
-  def addGameToSheet(sheetId: String, r: Req) : LiftResponse = {
-    println("adding game to sheet" + sheetId)
-    new OkResponse()
+  private def addDealTo(sheetId: Int, json: JValue, r: Req) : LiftResponse = {
+    println("adding deal to sheet" + sheetId)
+    val deal = json.extract[Deal]
+    val jsonResponse = ("standing" -> openSheets(sheetId - 1).addDeal(deal).scores)
+    RestCreatedResponse(buildLocationUrl(r, openSheets(sheetId - 1).id), "application/json", compact(JsonAST.render(jsonResponse)))
   }
 }
 
 case class NewSheet(group: String, location: String, playerIds: List[Int])
+
+case class Deal(gameType: String, score: Int, actions: List[Actions])
+
+case class Actions(
+    // TODO: improve types
+    party: String,
+    announcement: Int,
+    foxesCaught: Int,
+    foxesLost: Int,
+    charly: String,
+    doubleHeads: Int,
+    hasSwines: boolean,
+    hasMarriage: boolean,
+    isPoor: boolean)
 
 case class Standing(scores: List[Int])
 

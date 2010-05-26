@@ -5,3 +5,5 @@ target/
 liftkopf.iws
 liftkopf.iml
 liftkopf.ipr
+nb-configuration.xml
+nbactions.xml

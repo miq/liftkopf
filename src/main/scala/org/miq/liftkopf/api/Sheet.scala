@@ -10,20 +10,29 @@ import net.liftweb.json.JsonDSL._
 
 class Sheet(val id: Int, val location: String, val group: String, val playerIds: List[Int]) {
   private val deals : ListBuffer[Deal] = new ListBuffer[Deal]
+  private var currentStanding : Standing = new Standing(playerIds.map(_ => 0))
 
   def addDeal(newDeal: Deal) : Standing = {
     deals + newDeal
-    calculateCurrentStanding(newDeal)
+    currentStanding = calculateCurrentStanding(newDeal)
+    getStanding()
   }
 
   def calculateCurrentStanding(newDeal: Deal) : Standing = {
     println("score: " + newDeal.score)
     println("actions count: " + newDeal.actions.size)
     // TODO calculate the new standings
+    val extraPoints = calculateExtraPoints(newDeal)
     getStanding()
   }
 
-  def getStanding() : Standing = new Standing(playerIds.map(_ => 0))
+  private def calculateExtraPoints(newDeal: Deal) : Int = {
+    val reActions = newDeal.actions.filter(_.party == "re")
+    val contraActions = newDeal.actions.filter(_.party == "contra")
+    0
+  }
+
+  def getStanding() : Standing = currentStanding
 
 }
 

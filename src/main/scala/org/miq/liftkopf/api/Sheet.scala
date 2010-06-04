@@ -67,7 +67,10 @@ case class Actions(
     doubleHeads: Int,
     hasSwines: boolean,
     hasMarriage: boolean,
-    isPoor: boolean)
+    isPoor: boolean) {
+
+  def this() = this("", 0, 0, 0, "", 0, false, false, false)
+}
 
 case class Standing(scores: List[Int]) {
   def +(s: Standing) : Standing = {

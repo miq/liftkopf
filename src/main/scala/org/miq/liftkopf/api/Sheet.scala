@@ -10,21 +10,15 @@ import net.liftweb.json.JsonDSL._
 
 class Sheet(val id: Int, val location: String, val group: String, val playerIds: List[Int]) {
   private val deals : ListBuffer[Deal] = new ListBuffer[Deal]
+  private var currentStanding = new Standing(playerIds.map(_ => 0))
 
   def addDeal(newDeal: Deal) : Standing = {
     deals + newDeal
-    calculateCurrentStanding(newDeal)
+    currentStanding = getStanding() + newDeal.result
+    return getStanding()    
   }
 
-  def calculateCurrentStanding(newDeal: Deal) : Standing = {
-    println("score: " + newDeal.score)
-    println("actions count: " + newDeal.actions.size)
-    // TODO calculate the new standings
-    getStanding()
-  }
-
-  def getStanding() : Standing = new Standing(playerIds.map(_ => 0))
-
+  def getStanding() : Standing = currentStanding
 }
 
 
@@ -63,8 +57,6 @@ object Sheet extends LiftkopfRest {
 
 case class NewSheet(group: String, location: String, playerIds: List[Int])
 
-case class Deal(gameType: String, score: Int, actions: List[Actions])
-
 case class Actions(
     // TODO: improve types
     party: String,
@@ -77,5 +69,9 @@ case class Actions(
     hasMarriage: boolean,
     isPoor: boolean)
 
-case class Standing(scores: List[Int])
+case class Standing(scores: List[Int]) {
+  def +(s: Standing) : Standing = {
+    new Standing(for (myScore <- scores; newScore <- s.scores) yield myScore + newScore)
+  }
+}
 

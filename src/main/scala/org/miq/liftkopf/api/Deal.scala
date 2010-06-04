@@ -5,6 +5,6 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
     println("score: " + score)
     println("actions count: " + actions.size)
     // TODO calculate the new standings
-    new Standing(actions.map(_ => 0))
+    new Standing(actions.map(a => if (a.party == "re") 1 else -1))
   }
 }

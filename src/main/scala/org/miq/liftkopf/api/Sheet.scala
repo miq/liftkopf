@@ -69,7 +69,7 @@ case class Actions(
     hasMarriage: boolean,
     isPoor: boolean) {
 
-  def this() = this("", 0, 0, 0, "", 0, false, false, false)
+  def this(party: String) = this(party, 0, 0, 0, "", 0, false, false, false)
 }
 
 case class Standing(scores: List[Int]) {

@@ -1,32 +1,21 @@
 package org.miq.liftkopf.api
 
 case class Deal(gameType: String, score: Int, actions: List[Actions]) {
+  private val reWinLevels = List(121, 151, 181, 211, 240)
+  private val contraWinLevels = List(120, 89, 59, 29, 0)
+
   def result : Standing = {
     println("score: " + score)
     println("actions count: " + actions.size)
     // TODO calculate the new standings
     val winner =  if (score > 120) Deal.Re else Deal.Contra
-    var (points, increment) = if (winner == Deal.Re) (1, 1) else (-2, -1)
-    // additional points for re winning steps
-    var tempScore = 150
-    while (score > tempScore && winner == Deal.Re) {
-      points += increment
-      tempScore += 30
+    var increment = if (winner == Deal.Re) 1 else -1
+    val points = if (winner == Deal.Re) {
+      reWinLevels.filter(score >= _).size
+    } else {
+      (contraWinLevels.filter(score <= _).size + 1) * increment
     }
-    // for shutting out contra
-    if (score == 240 && winner == Deal.Re) {
-      points += increment
-    }
-    // additional points for contra winning steps
-    var reLosingScore = 90
-    while (score < reLosingScore && winner == Deal.Contra) {
-      points += increment
-      reLosingScore -= 30
-    }
-    // for shutting out contra
-    if (score == 0 && winner == Deal.Contra) {
-      points += increment
-    }
+    println("points:" + points)
     new Standing(actions.map(a => if (a.party == Deal.Re) points else -points))
   }
 }

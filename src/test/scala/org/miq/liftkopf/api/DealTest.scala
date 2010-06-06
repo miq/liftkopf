@@ -4,7 +4,7 @@ import org.scalatest.junit.AssertionsForJUnit
 import org.junit.Test
 
 class DealTest extends AssertionsForJUnit {
-  private val noSpecialActions = List(new Actions("re"), new Actions("contra"), new Actions("contra"), new Actions("re"))
+  private val noSpecialActions = List(new Actions(Deal.Re), new Actions(Deal.Contra), new Actions(Deal.Contra), new Actions(Deal.Re))
 
   @Test def calculateSimpleWins() {
     assert(new Standing(List(1, -1, -1, 1)) === new Deal("normal", 125, noSpecialActions).result)

@@ -15,7 +15,7 @@ class Sheet(val id: Int, val location: String, val group: String, val playerIds:
   def addDeal(newDeal: Deal) : Standing = {
     deals + newDeal
     currentStanding = getStanding() + newDeal.result
-    return getStanding()    
+    return getStanding()
   }
 
   def getStanding() : Standing = currentStanding
@@ -69,7 +69,9 @@ case class Actions(
     hasMarriage: Boolean,
     isPoor: Boolean) {
 
-  def this(party: String) = this(party, 0, 0, 0, "", 0, false, false, false)
+  def this(party: String, announcement: Int) = this(party, announcement, 0, 0, "", 0, false, false, false)
+
+  def this(party: String) = this(party, 0)
 }
 
 case class Standing(scores: List[Int]) {

@@ -11,11 +11,10 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
     println("reAnnouncement:" + reAnnouncement)
     println("contraAnnouncement:" + contraAnnouncement)
     val winner =  if (score > 120) Deal.Re else Deal.Contra
-    val increment = if (winner == Deal.Re) 1 else -1
     var points = if (winner == Deal.Re) {
       reWinLevels.filter(score >= _).size
     } else {
-      (contraWinLevels.filter(score <= _).size + 1) * increment
+      (contraWinLevels.filter(score <= _).size + 1) * -1
     }
     if (reAnnouncement > 0 && winner == Deal.Re) {
       points *= 2

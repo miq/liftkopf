@@ -36,4 +36,9 @@ class DealTest extends AssertionsForJUnit {
     assert(new Standing(List(10, -10, 10, -10)) === new Deal("normal", 29, contraWinActions).result)
   }
 
+  @Test def calculateLossBecauseAnnouncement() {
+    val reLossActions = List(new Actions(Deal.Re, 90), contraAction, reAction, contraAction)
+    assert(new Standing(List(-8, 8, -8, 8)) === new Deal("normal", 150, reLossActions).result)
+  }
+
 }

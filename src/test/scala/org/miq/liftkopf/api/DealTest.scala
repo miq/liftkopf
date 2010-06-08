@@ -28,8 +28,12 @@ class DealTest extends AssertionsForJUnit {
   }
 
   @Test def calculateAnnouncedWins() {
-    val actions = List(reAction, new Actions(Deal.Re, 120), contraAction, contraAction)
-    assert(new Standing(List(4, 4, -4, -4)) === new Deal("normal", 151, actions).result)
+    val reWinActions = List(reAction, new Actions(Deal.Re, 120), contraAction, contraAction)
+    assert(new Standing(List(4, 4, -4, -4)) === new Deal("normal", 151, reWinActions).result)
+    assert(new Standing(List(6, 6, -6, -6)) === new Deal("normal", 181, reWinActions).result)
+    val contraWinActions = List(contraAction, reAction, new Actions(Deal.Contra, 120), reAction)
+    assert(new Standing(List(4, -4, 4, -4)) === new Deal("normal", 119, contraWinActions).result)
+    assert(new Standing(List(10, -10, 10, -10)) === new Deal("normal", 29, contraWinActions).result)
   }
 
 }

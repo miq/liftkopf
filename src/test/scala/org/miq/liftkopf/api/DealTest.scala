@@ -8,8 +8,12 @@ class DealTest extends ShouldMatchersForJUnit {
   private val contraAction = new Actions(Deal.Contra)
   private val noSpecialActions = List(reAction, contraAction, contraAction, reAction)
 
-  @Test def calculateSimpleWins() {
+  @Test def calculateSimpleWin() {
     new Deal(125, noSpecialActions).result should be (new Standing(List(1, -1, -1, 1)))
+  }
+
+  @Test def calculateSimpleLoss() {
+    new Deal(119, noSpecialActions).result should be (new Standing(List(-2, 2, 2, -2)))
   }
 
   @Test def calculateScoreTie() {

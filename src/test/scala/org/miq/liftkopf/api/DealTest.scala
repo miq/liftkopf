@@ -1,7 +1,7 @@
 package org.miq.liftkopf.api
 
 import org.junit.Test
-import org.scalatest.junit.{ShouldMatchersForJUnit, AssertionsForJUnit}
+import org.scalatest.junit.ShouldMatchersForJUnit
 
 class DealTest extends ShouldMatchersForJUnit {
   private val reAction = new Actions(Deal.Re)

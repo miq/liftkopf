@@ -9,36 +9,38 @@ class DealTest extends ShouldMatchersForJUnit {
   private val noSpecialActions = List(reAction, contraAction, contraAction, reAction)
 
   @Test def calculateSimpleWins() {
-    new Deal("normal", 125, noSpecialActions).result should be (new Standing(List(1, -1, -1, 1)))
+    new Deal(125, noSpecialActions).result should be (new Standing(List(1, -1, -1, 1)))
   }
 
   @Test def calculateScoreTie() {
-    new Deal("normal", 120, noSpecialActions).result should be (new Standing(List(-2, 2, 2, -2)))
+    new Deal(120, noSpecialActions).result should be (new Standing(List(-2, 2, 2, -2)))
   }
 
   @Test def calculateConsiderableWins() {
-    new Deal("normal", 151, noSpecialActions).result should be (new Standing(List(2, -2, -2, 2)))
-    new Deal("normal", 89, noSpecialActions).result should be (new Standing(List(-3, 3, 3, -3)))
-    new Deal("normal", 181, noSpecialActions).result should be (new Standing(List(3, -3, -3, 3)))
-    new Deal("normal", 59, noSpecialActions).result should be (new Standing(List(-4, 4, 4, -4)))
-    new Deal("normal", 211, noSpecialActions).result should be (new Standing(List(4, -4, -4, 4)))
-    new Deal("normal", 29, noSpecialActions).result should be (new Standing(List(-5, 5, 5, -5)))
-    new Deal("normal", 240, noSpecialActions).result should be (new Standing(List(5, -5, -5, 5)))
-    new Deal("normal", 0, noSpecialActions).result should be (new Standing(List(-6, 6, 6, -6)))
+    new Deal(151, noSpecialActions).result should be (new Standing(List(2, -2, -2, 2)))
+    new Deal(89, noSpecialActions).result should be (new Standing(List(-3, 3, 3, -3)))
+    new Deal(181, noSpecialActions).result should be (new Standing(List(3, -3, -3, 3)))
+    new Deal(59, noSpecialActions).result should be (new Standing(List(-4, 4, 4, -4)))
+    new Deal(211, noSpecialActions).result should be (new Standing(List(4, -4, -4, 4)))
+    new Deal(29, noSpecialActions).result should be (new Standing(List(-5, 5, 5, -5)))
+    new Deal(240, noSpecialActions).result should be (new Standing(List(5, -5, -5, 5)))
+    new Deal(0, noSpecialActions).result should be (new Standing(List(-6, 6, 6, -6)))
   }
 
   @Test def calculateAnnouncedWins() {
     val reWinActions = List(reAction, new Actions(Deal.Re, 120), contraAction, contraAction)
-    new Deal("normal", 151, reWinActions).result should be (new Standing(List(4, 4, -4, -4)))
-    new Deal("normal", 181, reWinActions).result should be (new Standing(List(6, 6, -6, -6)))
+    new Deal(151, reWinActions).result should be (new Standing(List(4, 4, -4, -4)))
+    new Deal(181, reWinActions).result should be (new Standing(List(6, 6, -6, -6)))
     val contraWinActions = List(contraAction, reAction, new Actions(Deal.Contra, 120), reAction)
-    new Deal("normal", 119, contraWinActions).result should be (new Standing(List(4, -4, 4, -4)))
-    new Deal("normal", 29, contraWinActions).result should be (new Standing(List(10, -10, 10, -10)))
+    new Deal(119, contraWinActions).result should be (new Standing(List(4, -4, 4, -4)))
+    new Deal(29, contraWinActions).result should be (new Standing(List(10, -10, 10, -10)))
   }
 
   @Test def calculateLossBecauseOfBid() {
     val reLossActions = List(new Actions(Deal.Re, 90), contraAction, reAction, contraAction)
-    new Deal("normal", 150, reLossActions).result should be (new Standing(List(-8, 8, -8, 8)))
+    new Deal(150, reLossActions).result should be (new Standing(List(-8, 8, -8, 8)))
+    val contraLossActions = List(reAction, reAction, contraAction, new Actions(Deal.Contra, 90))
+    new Deal(90, contraLossActions).result should be (new Standing(List(6, 6, -6, -6)))
   }
 
 }

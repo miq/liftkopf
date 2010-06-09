@@ -4,6 +4,8 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
   private val reWinLevels = List(121, 151, 181, 211, 240)
   private val contraWinLevels = List(120, 89, 59, 29, 0)
 
+  def this(score: Int, actions: List[Actions]) = this("normal", score, actions)
+
   def result : Standing = {
     // TODO calculate the new standings
     val reBid = getStrongestBidFor(Deal.Re)
@@ -11,13 +13,13 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
     println("re bid:" + reBid)
     println("contra bid:" + contraBid)
     val winner =  if (score > 120 && (reWonBid_?(reBid)
-            || tieButContraBid_?(contraBid) || contraLostBid_?(contraBid))) Deal.Re else Deal.Contra
+            || tieButContraBid_?(contraBid)) || contraLostBid_?(contraBid)) Deal.Re else Deal.Contra
     val increment = winner match {
       case Deal.Re => 1
       case Deal.Contra => -1
     }
     var points = if (winner == Deal.Re) {
-      reWinLevels.filter(score >= _).size
+      Math.max(reWinLevels.filter(score >= _).size, 1)
     } else {
       (contraWinLevels.filter(score <= _).size + 1) * increment
     }
@@ -31,6 +33,14 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
         points += increment;
       }
       k -= 30;
+    }
+    /* points for re, if contra party lost her bid */
+    if (contraLostBid_?(contraBid)) {
+      var p = contraBid;
+      while (p < 120) {
+        points += increment;
+        p += 30;
+      }
     }
     /* points for contra, if re party lost her bid */
     if (!reWonBid_?(reBid)) {
@@ -61,6 +71,7 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
   }
 
   private def tieButContraBid_?(bid: Int) : Boolean = {
+    println("contra lost bid?:" + score == 120 && bid > 0)
     score == 120 && bid > 0
   }
 

@@ -1,18 +1,17 @@
 package org.miq.liftkopf.api
 
-// TODO: rename announcement to bid (like in bridge)
 case class Deal(gameType: String, score: Int, actions: List[Actions]) {
   private val reWinLevels = List(121, 151, 181, 211, 240)
   private val contraWinLevels = List(120, 89, 59, 29, 0)
 
   def result : Standing = {
     // TODO calculate the new standings
-    val reAnnouncement = getStrongestAnnouncementFor(Deal.Re)
-    val contraAnnouncement = getStrongestAnnouncementFor(Deal.Contra)
-    println("reAnnouncement:" + reAnnouncement)
-    println("contraAnnouncement:" + contraAnnouncement)
-    val winner =  if (score > 120 && (reWonAnnouncement_?(reAnnouncement)
-            || tieButContraAnnouncement_?(contraAnnouncement) || contraLostAnnouncement_?(contraAnnouncement))) Deal.Re else Deal.Contra
+    val reBid = getStrongestBidFor(Deal.Re)
+    val contraBid = getStrongestBidFor(Deal.Contra)
+    println("re bid:" + reBid)
+    println("contra bid:" + contraBid)
+    val winner =  if (score > 120 && (reWonBid_?(reBid)
+            || tieButContraBid_?(contraBid) || contraLostBid_?(contraBid))) Deal.Re else Deal.Contra
     val increment = winner match {
       case Deal.Re => 1
       case Deal.Contra => -1
@@ -25,52 +24,52 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
     var k = 90;
     /* points for bids */
     while (k >= 0) {
-      if ((reAnnouncement <= k) && (reAnnouncement > 0)) {
+      if ((reBid <= k) && (reBid > 0)) {
         points += increment;
       }
-      if ((contraAnnouncement <= k) && (contraAnnouncement > 0)) {
+      if ((contraBid <= k) && (contraBid > 0)) {
         points += increment;
       }
       k -= 30;
     }
     /* points for contra, if re party lost her bid */
-    if (!reWonAnnouncement_?(reAnnouncement)) {
+    if (!reWonBid_?(reBid)) {
       // one point for "against the old ones"
       points += increment;
-      var p = 120 - reAnnouncement;
+      var p = 120 - reBid;
       while (p > 0) {
         points += increment;
         p -= 30;
       }
     }
-    if (reAnnouncement > 0) {
+    if (reBid > 0) {
       points *= 2
     }
-    if (contraAnnouncement > 0) {
+    if (contraBid > 0) {
       points *= 2
     }
     println("points:" + points)
     new Standing(actions.map(a => if (a.party == Deal.Re) points else -points))
   }
 
-  private def reWonAnnouncement_?(announcement: Int) : Boolean = {
-    (240 - score) < announcement || announcement <= 0
+  private def reWonBid_?(bid: Int) : Boolean = {
+    (240 - score) < bid || bid <= 0
   }
 
-  private def contraLostAnnouncement_?(announcement: Int) : Boolean = {
-    score >= announcement && announcement > 0
+  private def contraLostBid_?(bid: Int) : Boolean = {
+    score >= bid && bid > 0
   }
 
-  private def tieButContraAnnouncement_?(announcement: Int) : Boolean = {
-    score == 120 && announcement > 0
+  private def tieButContraBid_?(bid: Int) : Boolean = {
+    score == 120 && bid > 0
   }
 
-  private def getStrongestAnnouncementFor(party: String) : Int = {
-    val announcements = actions.filter(a => a.party == party && a.announcement > 0)
-    if (announcements.isEmpty) {
+  private def getStrongestBidFor(party: String) : Int = {
+    val bid = actions.filter(a => a.party == party && a.bid > 0)
+    if (bid.isEmpty) {
       0
     } else {
-      announcements.sort((a, b) => a.announcement < b.announcement).head.announcement
+      bid.sort((a, b) => a.bid < b.bid).head.bid
     }
   }
 }

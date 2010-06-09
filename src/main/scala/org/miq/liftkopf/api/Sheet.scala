@@ -60,7 +60,7 @@ case class NewSheet(group: String, location: String, playerIds: List[Int])
 case class Actions(
     // TODO: improve types
     party: String,
-    announcement: Int,
+    bid: Int,
     foxesCaught: Int,
     foxesLost: Int,
     charly: String,
@@ -69,7 +69,7 @@ case class Actions(
     hasMarriage: Boolean,
     isPoor: Boolean) {
 
-  def this(party: String, announcement: Int) = this(party, announcement, 0, 0, "", 0, false, false, false)
+  def this(party: String, bid: Int) = this(party, bid, 0, 0, "", 0, false, false, false)
 
   def this(party: String) = this(party, 0)
 }

@@ -1,8 +1,7 @@
 package org.miq.model
 
-import _root_.net.liftweb.mapper._
-import _root_.net.liftweb.util._
 import net.liftweb.common.Full
+import net.liftweb.mapper.{MappedTextarea, MetaMegaProtoUser, MegaProtoUser}
 
 /**
  * The singleton that has methods for accessing the database

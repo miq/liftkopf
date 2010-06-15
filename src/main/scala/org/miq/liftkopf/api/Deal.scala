@@ -3,6 +3,7 @@ package org.miq.liftkopf.api
 case class Deal(gameType: String, score: Int, actions: List[Actions]) {
   private val reWinLevels = List(121, 151, 181, 211, 240)
   private val contraWinLevels = List(120, 89, 59, 29, 0)
+  private val bidPointMap = Map(90 -> 1, 60 -> 2, 30 -> 3, 1 -> 4)
 
   def this(score: Int, actions: List[Actions]) = this("normal", score, actions)
 
@@ -23,17 +24,9 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
     } else {
       (contraWinLevels.filter(score <= _).size + 1) * increment
     }
-    var k = 90;
     /* points for bids */
-    while (k >= 0) {
-      if ((reBid <= k) && (reBid > 0)) {
-        points += increment;
-      }
-      if ((contraBid <= k) && (contraBid > 0)) {
-        points += increment;
-      }
-      k -= 30;
-    }
+    points += bidPointMap.getOrElse(reBid, 0) * increment
+    points += bidPointMap.getOrElse(contraBid, 0) * increment
     /* points for re, if contra party lost her bid */
     if (contraLostBid_?(contraBid)) {
       var p = contraBid;
@@ -71,7 +64,6 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
   }
 
   private def tieButContraBid_?(bid: Int) : Boolean = {
-    println("contra lost bid?:" + score == 120 && bid > 0)
     score == 120 && bid > 0
   }
 

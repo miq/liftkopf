@@ -40,6 +40,11 @@ class DealTest extends ShouldMatchersForJUnit {
     new Deal(29, contraWinActions).result should be (new Standing(List(10, -10, 10, -10)))
   }
 
+  @Test def calculateShutdownAnnouncedWin() {
+    val reWinActions = List(reAction, new Actions(Deal.Re, 1), contraAction, contraAction)
+    new Deal(240, reWinActions).result should be (new Standing(List(18, 18, -18, -18)))
+  }
+
   @Test def calculateLossBecauseOfBid() {
     val reLossActions = List(new Actions(Deal.Re, 90), contraAction, reAction, contraAction)
     new Deal(150, reLossActions).result should be (new Standing(List(-8, 8, -8, 8)))

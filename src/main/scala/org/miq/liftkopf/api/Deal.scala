@@ -45,14 +45,18 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
         p -= 30;
       }
     }
-    if (reBid > 0) {
-      points *= 2
-    }
-    if (contraBid > 0) {
-      points *= 2
-    }
+    points = applyBidBonus(points, reBid)
+    points = applyBidBonus(points, contraBid)
     println("points:" + points)
     new Standing(actions.map(a => if (a.party == Deal.Re) points else -points))
+  }
+
+  def applyBidBonus(points: Int, bid: Int): Int = {
+    if (bid > 0) {
+      points * 2
+    } else {
+      points
+    }
   }
 
   private def reWonBid_?(bid: Int) : Boolean = {

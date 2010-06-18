@@ -23,7 +23,7 @@ class Boot {
     }
     // where to search snippet
     LiftRules.addToPackages("org.miq")
-    Schemifier.schemify(true, Log.infoF _, User, ToDo)
+    Schemifier.schemify(true, Log.infoF _, User)
     // Build SiteMap
     val entries = Menu(Loc("Home", List("index"), S.?("Home"))) :: Menu(Loc("Statistics", List("statistics"), S.?("Statistics"))) :: User.sitemap
     LiftRules.setSiteMap(SiteMap(entries: _*))

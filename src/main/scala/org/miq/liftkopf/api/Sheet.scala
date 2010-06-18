@@ -10,21 +10,15 @@ import net.liftweb.json.JsonDSL._
 
 class Sheet(val id: Int, val location: String, val group: String, val playerIds: List[Int]) {
   private val deals : ListBuffer[Deal] = new ListBuffer[Deal]
+  private var currentStanding = new Standing(playerIds.map(_ => 0))
 
   def addDeal(newDeal: Deal) : Standing = {
     deals + newDeal
-    calculateCurrentStanding(newDeal)
+    currentStanding = getStanding() + newDeal.result
+    return getStanding()
   }
 
-  def calculateCurrentStanding(newDeal: Deal) : Standing = {
-    println("score: " + newDeal.score)
-    println("actions count: " + newDeal.actions.size)
-    // TODO calculate the new standings
-    getStanding()
-  }
-
-  def getStanding() : Standing = new Standing(playerIds.map(_ => 0))
-
+  def getStanding() : Standing = currentStanding
 }
 
 
@@ -63,19 +57,26 @@ object Sheet extends LiftkopfRest {
 
 case class NewSheet(group: String, location: String, playerIds: List[Int])
 
-case class Deal(gameType: String, score: Int, actions: List[Actions])
-
 case class Actions(
     // TODO: improve types
     party: String,
-    announcement: Int,
+    bid: Int,
     foxesCaught: Int,
     foxesLost: Int,
     charly: String,
     doubleHeads: Int,
-    hasSwines: boolean,
-    hasMarriage: boolean,
-    isPoor: boolean)
+    hasSwines: Boolean,
+    hasMarriage: Boolean,
+    isPoor: Boolean) {
 
-case class Standing(scores: List[Int])
+  def this(party: String, bid: Int) = this(party, bid, 0, 0, "", 0, false, false, false)
+
+  def this(party: String) = this(party, 0)
+}
+
+case class Standing(scores: List[Int]) {
+  def +(s: Standing) : Standing = {
+    new Standing(for (myScore <- scores; newScore <- s.scores) yield myScore + newScore)
+  }
+}
 

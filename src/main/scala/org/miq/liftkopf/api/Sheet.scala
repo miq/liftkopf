@@ -57,23 +57,6 @@ object Sheet extends LiftkopfRest {
 
 case class NewSheet(group: String, location: String, playerIds: List[Int])
 
-case class Actions(
-    // TODO: improve types
-    party: String,
-    bid: Int,
-    foxesCaught: Int,
-    foxesLost: Int,
-    charly: String,
-    doubleHeads: Int,
-    hasSwines: Boolean,
-    hasMarriage: Boolean,
-    isPoor: Boolean) {
-
-  def this(party: String, bid: Int) = this(party, bid, 0, 0, "", 0, false, false, false)
-
-  def this(party: String) = this(party, 0)
-}
-
 case class Standing(scores: List[Int]) {
   def +(s: Standing) : Standing = {
     new Standing(for (myScore <- scores; newScore <- s.scores) yield myScore + newScore)

@@ -4,6 +4,7 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
   private val reWinLevels = List(121, 151, 181, 211, 240)
   private val contraWinLevels = List(120, 89, 59, 29, 0)
   private val bidPointMap = Map(90 -> 1, 60 -> 2, 30 -> 3, 1 -> 4)
+  private val soloTypes = List(Deal.JackSoloType, Deal.QueenSoloType, Deal.ColorSoloType, Deal.QuietSoloType)
 
   def this(score: Int, actions: List[Actions]) = this("normal", score, actions)
 
@@ -22,7 +23,7 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
     var points = if (winner == Deal.Re) {
       Math.max(reWinLevels.filter(score >= _).size, 1)
     } else {
-      (contraWinLevels.filter(score <= _).size + 1) * increment
+      (contraWinLevels.filter(score <= _).size + (if (soloGame_?) 0 else 1)) * increment
     }
     /* points for bids */
     points += bidPointMap.getOrElse(reBid, 0) * increment
@@ -48,10 +49,20 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
     points = applyBidBonus(points, reBid)
     points = applyBidBonus(points, contraBid)
     println("points:" + points)
-    new Standing(actions.map(a => if (a.party == Deal.Re) points else -points))
+    new Standing(actions.map(a => calculatePointsResultFor(a, points)))
   }
 
-  def applyBidBonus(points: Int, bid: Int): Int = {
+  private def calculatePointsResultFor(a: Actions, points: Int) : Int = {
+    if (a.party == Deal.Re) {
+      if (soloGame_?) points * 3 else points
+    } else {
+      -points
+    }
+  }
+
+  private def soloGame_? : Boolean = soloTypes.contains(gameType)
+
+  private def applyBidBonus(points: Int, bid: Int): Int = {
     if (bid > 0) {
       points * 2
     } else {
@@ -84,4 +95,8 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
 object Deal {
   val Re = "re"
   val Contra = "contra"
+  val JackSoloType = "jackSolo"
+  val QueenSoloType = "queenSolo"
+  val QuietSoloType = "quietSolo"
+  val ColorSoloType = "colorSolo"
 }

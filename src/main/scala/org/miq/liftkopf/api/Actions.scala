@@ -16,3 +16,10 @@ case class Actions(
 
   def this(party: String) = this(party, 0)
 }
+
+object Actions {
+  val CharlyPoint = "cp"
+  val CharlyLost = "cl"
+  val CharlyCaught = "cc"
+  val CharlyPointCaught = "cpc"
+}

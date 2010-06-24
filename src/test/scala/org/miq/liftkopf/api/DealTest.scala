@@ -52,4 +52,10 @@ class DealTest extends ShouldMatchersForJUnit {
     new Deal(90, contraLossActions).result should be (new Standing(List(6, 6, -6, -6)))
   }
 
+  @Test def calculateSoloWins() {
+    val soloActions = List(contraAction, contraAction, reAction, contraAction)
+    new Deal(Deal.JackSoloType, 130, soloActions).result should be (new Standing(List(-1, -1, 3, -1)))
+    new Deal(Deal.QueenSoloType, 119, soloActions).result should be (new Standing(List(1, 1, -3, 1)))
+  }
+
 }

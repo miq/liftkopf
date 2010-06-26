@@ -10,7 +10,7 @@ import net.liftweb.json.JsonDSL._
 
 class Sheet(val id: Int, val location: String, val group: String, val playerIds: List[Int]) {
   private val deals : ListBuffer[Deal] = new ListBuffer[Deal]
-  private var currentStanding = new Standing(playerIds.map(_ => 0): _*)
+  private var currentStanding = Standing(playerIds.map(_ => 0): _*)
 
   def addDeal(newDeal: Deal) : Standing = {
     deals + newDeal
@@ -56,9 +56,3 @@ object Sheet extends LiftkopfRest {
 }
 
 case class NewSheet(group: String, location: String, playerIds: List[Int])
-
-case class Standing(scores: Int*) {
-  def +(s: Standing) : Standing = {
-    new Standing((for (myScore <- scores; newScore <- s.scores) yield myScore + newScore) : _*)
-  }
-}

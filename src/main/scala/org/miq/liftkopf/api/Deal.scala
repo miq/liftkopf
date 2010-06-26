@@ -48,7 +48,7 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
     points = applyBidBonus(points, reBid)
     points = applyBidBonus(points, contraBid)
     points += computeExtraPoints(actions.filter(_.party == Deal.Re), actions.filter(_.party == Deal.Contra))
-    new Standing(actions.map(a => calculatePointsResultFor(a, points)) : _*)
+    Standing(actions.map(a => calculatePointsResultFor(a, points)) : _*)
   }
 
   private def calculatePointsResultFor(a: Actions, points: Int) : Int = {

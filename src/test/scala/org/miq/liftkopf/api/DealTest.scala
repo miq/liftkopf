@@ -127,4 +127,9 @@ class DealTest extends ShouldMatchersForJUnit {
       new Actions(Deal.Contra, 0, 0, 0, "", 1, false, false, false))
     new Deal(128, oneForEach).result should be (new Standing(List(-1, 1, 1, -1)))
   }
+
+  @Test def calculatePovertyLoss() {
+    val poverty = List(contraAction, contraAction, new Actions(Deal.Re, 0, 0, 0, "", 0, false, false, true), reAction)
+    new Deal(112, poverty).result should be (new Standing(List(1, 1, -1, -1)))
+  }
 }

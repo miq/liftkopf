@@ -22,7 +22,7 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
     var points = if (winner == Deal.Re) {
       Math.max(reWinLevels.filter(score >= _).size, 1)
     } else {
-      (contraWinLevels.filter(score <= _).size + (if (soloGame_?) 0 else 1)) * increment
+      (contraWinLevels.filter(score <= _).size + (if (soloGame_? || poverty_?) 0 else 1)) * increment
     }
     /* points for bids */
     points += bidPointMap.getOrElse(reBid, 0) * increment
@@ -60,6 +60,8 @@ case class Deal(gameType: String, score: Int, actions: List[Actions]) {
   }
 
   private def soloGame_? : Boolean = soloTypes.contains(gameType)
+
+  private def poverty_? : Boolean = actions.exists(_.isPoor)
 
   private def applyBidBonus(points: Int, bid: Int): Int = {
     if (bid > 0) {
